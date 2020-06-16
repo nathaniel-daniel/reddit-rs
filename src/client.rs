@@ -9,11 +9,13 @@ use hyper::{
 };
 use hyper_tls::HttpsConnector;
 
+/// A client to access reddit
 pub struct Client {
     client: HyperClient<HttpsConnector<HttpConnector>, hyper::Body>,
 }
 
 impl Client {
+    /// Create a new client
     pub fn new() -> Self {
         let https = HttpsConnector::new();
         let client = HyperClient::builder().build::<_, hyper::Body>(https);
