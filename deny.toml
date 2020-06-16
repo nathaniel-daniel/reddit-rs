@@ -1,0 +1,37 @@
+targets = [
+    { triple = "x86_64-unknown-linux-gnu" },
+    { triple = "x86_64-unknown-linux-musl" },
+    { triple = "x86_64-apple-darwin" },
+    { triple = "x86_64-pc-windows-msvc" },
+]
+
+[advisories]
+vulnerability = "deny"
+unmaintained = "deny"
+notice = "deny"
+ignore = [
+    # blocked on tokio bumping mio to 0.7
+    "RUSTSEC-2020-0016",
+]
+
+[licenses]
+unlicensed = "allow" # TODO: Fix Unlicensed
+copyleft = "warn"
+allow-osi-fsf-free = "neither"
+confidence-threshold = 0.93
+default = "deny"
+private = { ignore = true }
+allow = [ "Apache-2.0", "MIT", "Unlicense"]
+
+[bans]
+multiple-versions = "warn"
+highlight = "all"
+skip = [
+    # blocked on tokio bumping mio to 0.7
+    { name = "winapi", version = "0.2.8" },
+]
+
+[sources]
+unknown-registry = "warn"
+unknown-git = "warn"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
