@@ -103,10 +103,13 @@ mod test {
 
     #[tokio::test]
     async fn get_post_works() {
+        let post_data = [("dankmemes", "h966lq"), ("dankvideos", "h8p0py")];
         let client = Client::new();
 
-        let res = client.get_post("dankmemes", "h966lq").await.unwrap();
-        dbg!(res);
+        for (subreddit, post_id) in post_data.iter() {
+            let res = client.get_post(subreddit, post_id).await.unwrap();
+            dbg!(res);
+        }
     }
 
     #[tokio::test]

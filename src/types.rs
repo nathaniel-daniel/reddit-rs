@@ -90,7 +90,7 @@ pub struct Listing {
 #[derive(Debug, serde::Deserialize)]
 pub struct Votable {
     /// the number of upvotes. (includes own)
-    pub ups: u64,
+    pub ups: i64,
 
     /// the number of downvotes. (includes own)
     pub downs: u64,
@@ -181,7 +181,7 @@ pub struct Comment {
     pub saved: bool,
 
     /// the net-score of the comment
-    pub score: u64,
+    pub score: i64,
 
     /// Whether the comment's score is currently hidden.
     pub score_hidden: bool,
@@ -274,7 +274,7 @@ pub struct Link {
     /// So taking the above example, if five users upvoted the submission, and three users downvote it,
     /// the upvote/downvote numbers may say 23 upvotes and 21 downvotes, or 12 upvotes, and 10 downvotes.
     /// The points score is correct, but the vote totals are "fuzzed".
-    pub score: u64,
+    pub score: i64,
 
     /// the raw text.
     /// this is the unformatted text which includes the raw markup characters such as ** for bold.
@@ -418,6 +418,7 @@ mod test {
 
     const SUBREDDIT_SAMPLE_1: &str = include_str!("../test_data/subreddit_dankmemes.json");
     const COMMENT_SAMPLE_1: &str = include_str!("../test_data/comment_h966lq.json");
+    const COMMENT_SAMPLE_2: &str = include_str!("../test_data/comment_h8p0py.json");
 
     #[test]
     fn parse_subreddit() {
@@ -426,8 +427,14 @@ mod test {
     }
 
     #[test]
-    fn parse_comments() {
+    fn parse_comments_1() {
         let res = serde_json::from_str::<Vec<Thing>>(COMMENT_SAMPLE_1).unwrap();
+        dbg!(res);
+    }
+
+    #[test]
+    fn parse_comments_2() {
+        let res = serde_json::from_str::<Vec<Thing>>(COMMENT_SAMPLE_2).unwrap();
         dbg!(res);
     }
 }
