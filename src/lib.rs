@@ -1,9 +1,20 @@
 pub mod types;
 
-pub use crate::types::{Listing, PostHint, SubRedditEntry, SubRedditEntryData, SubRedditListing};
-pub use http::uri::InvalidUri;
-pub use http::StatusCode;
-use hyper::{client::HttpConnector, Client as HyperClient};
+pub use crate::types::{
+    Listing,
+    PostHint,
+    SubRedditEntry,
+    SubRedditEntryData,
+    SubRedditListing,
+};
+pub use http::{
+    uri::InvalidUri,
+    StatusCode,
+};
+use hyper::{
+    client::HttpConnector,
+    Client as HyperClient,
+};
 use hyper_tls::HttpsConnector;
 
 #[derive(Debug)]

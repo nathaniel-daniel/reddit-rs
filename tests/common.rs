@@ -1,4 +1,8 @@
-use reddit::{Client, RedditError, RedditResult};
+use reddit::{
+    Client,
+    RedditError,
+    RedditResult,
+};
 
 // 25 is the default
 
