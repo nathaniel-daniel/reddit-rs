@@ -9,11 +9,8 @@ pub use crate::{
         RedditResult,
     },
     types::{
-        Listing,
         PostHint,
-        SubRedditEntry,
-        SubRedditEntryData,
-        SubRedditListing,
+        Thing,
     },
 };
 pub use http::{
