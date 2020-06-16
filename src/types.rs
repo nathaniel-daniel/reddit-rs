@@ -2,6 +2,8 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::collections::HashMap;
 
+// TODO: These are VERY best-effort, but i should still try to document what i can
+
 // From https://github.com/reddit-archive/reddit/wiki/json
 #[derive(Debug, Deserialize)]
 pub struct Listing<T> {
@@ -36,7 +38,10 @@ pub struct SubRedditEntry {
 #[derive(Debug, Deserialize)]
 pub struct SubRedditEntryData {
     pub archived: bool,
+
+    /// The author's username
     pub author: String,
+
     pub author_flair_css_class: Option<String>,
     pub author_flair_template_id: Option<String>,
     pub author_flair_text: Option<String>,
@@ -75,16 +80,27 @@ pub struct SubRedditEntryData {
     pub over_18: bool,
     pub parent_whitelist_status: Option<String>,
     pub permalink: String,
+
+    /// Whether this post is pinned
     pub pinned: bool,
+
+    /// A "hint" about what this post may be
     pub post_hint: Option<PostHint>,
+
     pub pwls: Option<u32>,
     pub quarantine: bool,
     pub saved: bool,
     pub score: u32,
     pub send_replies: bool,
+
+    /// Whether this post has a spoiler
     pub spoiler: bool,
+
     pub stickied: bool,
+
+    /// The subreddit this post originated from
     pub subreddit: String,
+
     pub subreddit_id: String,
     pub subreddit_name_prefixed: String,
     pub subreddit_subscribers: u64,
@@ -93,6 +109,8 @@ pub struct SubRedditEntryData {
     pub thumbnail: String,
     pub thumbnail_height: Option<u32>,
     pub thumbnail_width: Option<u32>,
+
+    /// The title of this post
     pub title: String,
     pub ups: u32,
     pub url: String,
@@ -104,11 +122,14 @@ pub struct SubRedditEntryData {
     pub unknown: HashMap<String, Value>,
 }
 
+/// Info on what the post may contain
 #[derive(Debug, Deserialize, PartialEq)]
 pub enum PostHint {
+    /// The post is an image
     #[serde(rename = "image")]
     Image,
 
+    /// The post is a link
     #[serde(rename = "link")]
     Link,
 
