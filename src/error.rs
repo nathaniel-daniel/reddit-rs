@@ -14,21 +14,21 @@ pub enum RedditError {
     /// Error parsing a uri
     InvalidUri(InvalidUri),
 
-    /// Invalid status code recieved
-    InvalidStatusCode(StatusCode),
+    /// Invalid status recieved
+    InvalidStatus(StatusCode),
 
     /// Failed to find subreddit
-    NotFound,
+    SubredditNotFound,
 
     /// Error parsing json. The optional bytes object is the json that failed to parse.
     Json(serde_json::Error, Option<bytes::Bytes>),
 }
 
 impl RedditError {
-    /// Returns true if the error type is "NotFound", false otherwise
-    pub fn is_not_found(&self) -> bool {
+    /// Returns true if the error type is "SubredditNotFound", false otherwise
+    pub fn is_subreddit_not_found(&self) -> bool {
         match self {
-            RedditError::NotFound => true,
+            RedditError::SubredditNotFound => true,
             _ => false,
         }
     }
