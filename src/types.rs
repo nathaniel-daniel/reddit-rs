@@ -1,3 +1,5 @@
+use url::Url;
+
 /// Reddit base class.
 /// Listing things have neither name nor id because they are indefinite objects.
 /// That is, they are system generated, not user submitted, and are subject to change quickly and expire.
@@ -331,7 +333,7 @@ pub struct Link {
     pub title: String,
 
     /// the link of this post. the permalink if this is a self-post
-    pub url: String,
+    pub url: Url,
 
     /// Indicates if link has been edited.
     /// Will be the edit timestamp if the link has been edited and return false otherwise.
