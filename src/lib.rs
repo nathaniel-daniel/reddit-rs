@@ -9,6 +9,8 @@ pub use crate::{
         RedditResult,
     },
     types::{
+        Link,
+        Listing,
         PostHint,
         Thing,
     },

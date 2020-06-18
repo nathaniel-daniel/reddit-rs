@@ -103,7 +103,11 @@ mod test {
 
     #[tokio::test]
     async fn get_post_works() {
-        let post_data = [("dankmemes", "h966lq"), ("dankvideos", "h8p0py")];
+        let post_data = [
+            ("dankmemes", "h966lq"),
+            ("dankvideos", "h8p0py"),
+            ("oddlysatisfying", "ha7obv"),
+        ];
         let client = Client::new();
 
         for (subreddit, post_id) in post_data.iter() {

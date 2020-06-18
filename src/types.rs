@@ -51,8 +51,32 @@ impl ThingData {
         }
     }
 
+    /// Tries to get this ThingData as a mutable listing
+    pub fn as_listing_mut(&mut self) -> Option<&mut Listing> {
+        match self {
+            ThingData::Listing(listing) => Some(listing),
+            _ => None,
+        }
+    }
+
+    /// Tries to turn this ThingData into a listing
+    pub fn into_listing(self) -> Option<Box<Listing>> {
+        match self {
+            ThingData::Listing(listing) => Some(listing),
+            _ => None,
+        }
+    }
+
     /// Tries to get this ThingData as a link
     pub fn as_link(&self) -> Option<&Link> {
+        match self {
+            ThingData::Link(link) => Some(link),
+            _ => None,
+        }
+    }
+
+    /// Tries to turn this ThingData into a link
+    pub fn into_link(self) -> Option<Box<Link>> {
         match self {
             ThingData::Link(link) => Some(link),
             _ => None,
@@ -206,6 +230,8 @@ pub struct Comment {
     /// Created Implementation
     #[serde(flatten)]
     pub created: Created,
+    // Experimentally determined fields
+    // TODO: These are VERY best-effort, but i should still try to document what i can
 }
 
 /// Implements votable | created
@@ -342,6 +368,10 @@ pub struct Link {
     pub can_gild: bool,
     pub can_mod_post: bool,
     pub contest_mode: bool,
+
+    /// I believe that this is included for crossposted posts to get the data for the main post
+    pub crosspost_parent_list: Option<Vec<Link>>,
+
     pub gilded: u64,
     pub hide_score: bool,
     pub id: String,
@@ -350,7 +380,10 @@ pub struct Link {
     pub is_original_content: bool,
     pub is_reddit_media_domain: bool,
     pub is_robot_indexable: bool,
+
+    /// Returns true if its a video
     pub is_video: bool,
+
     pub link_flair_text_color: String,
     pub link_flair_type: String,
     pub media_only: bool,
@@ -402,6 +435,7 @@ pub enum PostHint {
     #[serde(rename = "link")]
     Link,
 
+    /// A video hosted on reddit
     #[serde(rename = "hosted:video")]
     HostedVideo,
 
