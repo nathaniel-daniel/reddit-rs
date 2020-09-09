@@ -131,7 +131,15 @@ mod test {
         ];
 
         for subreddit in subreddits.iter() {
-            get_subreddit(subreddit).await.unwrap();
+            match get_subreddit(subreddit).await {
+                Ok(_) => {}
+                Err(RedditError::Json(e, _maybe_bytes)) => {
+                    panic!("{}: {:#?}", subreddit, e);
+                }
+                Err(e) => {
+                    panic!("{}: {:#?}", subreddit, e);
+                }
+            }
         }
     }
 
