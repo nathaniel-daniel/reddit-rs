@@ -446,6 +446,9 @@ pub enum PostHint {
 
     #[serde(rename = "self")]
     DataSelf,
+
+    #[serde(rename = "gallery")]
+    Gallery,
 }
 
 #[cfg(test)]

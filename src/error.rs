@@ -27,10 +27,7 @@ pub enum RedditError {
 impl RedditError {
     /// Returns true if the error type is "SubredditNotFound", false otherwise
     pub fn is_subreddit_not_found(&self) -> bool {
-        match self {
-            RedditError::SubredditNotFound => true,
-            _ => false,
-        }
+        matches!(self, RedditError::SubredditNotFound)
     }
 }
 
