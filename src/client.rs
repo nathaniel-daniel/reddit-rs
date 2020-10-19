@@ -67,7 +67,7 @@ impl Client {
 
         let body = hyper::body::to_bytes(res).await?;
 
-        serde_json::from_slice(&body).map_err(|e| RedditError::Json(e, Some(body)))
+        Ok(serde_json::from_slice(&body)?)
     }
 
     /// Get the post data for a post from a given subreddit
@@ -79,7 +79,7 @@ impl Client {
         .parse()?;
         let body = self.get_bytes(uri).await?;
 
-        serde_json::from_slice(&body).map_err(|e| RedditError::Json(e, Some(body)))
+        Ok(serde_json::from_slice(&body)?)
     }
 }
 
@@ -131,15 +131,7 @@ mod test {
         ];
 
         for subreddit in subreddits.iter() {
-            match get_subreddit(subreddit).await {
-                Ok(_) => {}
-                Err(RedditError::Json(e, _maybe_bytes)) => {
-                    panic!("{}: {:#?}", subreddit, e);
-                }
-                Err(e) => {
-                    panic!("{}: {:#?}", subreddit, e);
-                }
-            }
+            get_subreddit(subreddit).await.unwrap();
         }
     }
 
