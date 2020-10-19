@@ -131,7 +131,7 @@ mod test {
         ];
 
         for subreddit in subreddits.iter() {
-           get_subreddit(subreddit).await.unwrap();
+            get_subreddit(subreddit).await.unwrap();
         }
     }
 
