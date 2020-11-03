@@ -15,7 +15,7 @@ ignore = [
 ]
 
 [licenses]
-unlicensed = "allow" # TODO: Fix Unlicensed
+unlicensed = "deny"
 copyleft = "warn"
 allow-osi-fsf-free = "neither"
 confidence-threshold = 0.93
@@ -24,11 +24,15 @@ private = { ignore = true }
 allow = [ "Apache-2.0", "MIT", "Unlicense", "Zlib" ]
 
 [bans]
-multiple-versions = "warn"
+multiple-versions = "deny"
 highlight = "all"
 skip = [
     # blocked on tokio bumping mio to 0.7
     { name = "winapi", version = "0.2.8" },
+    
+    # blocked on tracing-futures bumping pin-project to 1.0.x86_64-apple-darwin
+    { name = "pin-project", version = "0.4.27" },
+    { name = "pin-project-internal", version = "0.4.27" },
 ]
 
 [sources]
