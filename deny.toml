@@ -9,10 +9,7 @@ targets = [
 vulnerability = "deny"
 unmaintained = "deny"
 notice = "deny"
-ignore = [
-    # blocked on tokio bumping mio to 0.7
-    "RUSTSEC-2020-0016",
-]
+ignore = []
 
 [licenses]
 unlicensed = "deny"
@@ -21,18 +18,17 @@ allow-osi-fsf-free = "neither"
 confidence-threshold = 0.93
 default = "deny"
 private = { ignore = true }
-allow = [ "Apache-2.0", "MIT", "Unlicense", "Zlib" ]
+allow = [ "Apache-2.0", "MIT", "Zlib" ]
 
 [bans]
 multiple-versions = "deny"
 highlight = "all"
 skip = [
-    # blocked on tokio bumping mio to 0.7
-    { name = "winapi", version = "0.2.8" },
+    # Blocked on http updating bytes to 1.0.x
+    { name = "bytes", version = "0.5.6" },
     
-    # blocked on tracing-futures bumping pin-project to 1.0.x86_64-apple-darwin
-    { name = "pin-project", version = "0.4.27" },
-    { name = "pin-project-internal", version = "0.4.27" },
+    # Blocked on tempfile updating cfg=if to 1.0.x
+    { name = "cfg-if", version = "0.1.10" },
 ]
 
 [sources]
