@@ -23,15 +23,15 @@ allow = [ "Apache-2.0", "MIT", "Zlib" ]
 [bans]
 multiple-versions = "deny"
 highlight = "all"
-skip = [
-    # Blocked on http updating bytes to 1.0.x
-    { name = "bytes", version = "0.5.6" },
-    
+skip = [    
     # Blocked on tempfile updating cfg=if to 1.0.x
     { name = "cfg-if", version = "0.1.10" },
+    
+    # Blocked on `miow` updating `socket` to `0.4.x`
+    { name = "socket2", version = "0.3.19" },
 ]
 
 [sources]
 unknown-registry = "warn"
 unknown-git = "warn"
-allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-registry = [ "https://github.com/rust-lang/crates.io-index" ]
