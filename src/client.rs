@@ -1,85 +1,53 @@
 use crate::{
-    error::{
-        RedditError,
-        RedditResult,
-    },
+    error::Error,
     types::Thing,
 };
-use bytes::Bytes;
-use http::StatusCode;
-use hyper::{
-    client::HttpConnector,
-    Client as HyperClient,
-};
-use hyper_tls::HttpsConnector;
 
 /// A client to access reddit
+#[derive(Clone)]
 pub struct Client {
-    client: HyperClient<HttpsConnector<HttpConnector>, hyper::Body>,
+    client: reqwest::Client,
 }
 
 impl Client {
-    /// Create a new client
+    /// Create a new [`Client`]
     pub fn new() -> Self {
-        let https = HttpsConnector::new();
-        let client = HyperClient::builder().build::<_, hyper::Body>(https);
-        Client { client }
-    }
-
-    async fn get_bytes(&self, uri: hyper::Uri) -> RedditResult<Bytes> {
-        let res = self.client.get(uri).await?;
-
-        let status = res.status();
-        if !status.is_success() {
-            return Err(RedditError::InvalidStatus(status));
+        Client {
+            client: reqwest::Client::new(),
         }
-        let body = hyper::body::to_bytes(res).await?;
-
-        Ok(body)
     }
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.
-    pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> RedditResult<Thing> {
-        let uri = format!(
+    pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> Result<Thing, Error> {
+        let url = format!(
             "https://www.reddit.com/r/{}.json?limit={}",
             subreddit, num_posts
-        )
-        .parse()?;
-        let res = self.client.get(uri).await?;
+        );
+        let res = self.client.get(&url).send().await?.error_for_status()?;
 
-        let status = res.status();
-        if !status.is_success() {
-            return match status {
-                StatusCode::FOUND => match res.headers().get(hyper::header::LOCATION) {
-                    Some(link) => {
-                        let url = b"https://www.reddit.com/subreddits/search.json?";
-                        if link.as_ref().starts_with(url) {
-                            Err(RedditError::SubredditNotFound)
-                        } else {
-                            Err(RedditError::InvalidStatus(status))
-                        }
-                    }
-                    None => Err(RedditError::InvalidStatus(status)),
-                },
-                _ => Err(RedditError::InvalidStatus(status)),
-            };
+        // Reddit will redirect us here if the subreddit could not be found.
+        const SEARCH_URL: &str = "https://www.reddit.com/subreddits/search.json?";
+        if res.url().as_str().starts_with(SEARCH_URL) {
+            return Err(Error::SubredditNotFound);
         }
 
-        let body = hyper::body::to_bytes(res).await?;
-
-        Ok(serde_json::from_slice(&body)?)
+        Ok(res.json().await?)
     }
 
     /// Get the post data for a post from a given subreddit
-    pub async fn get_post(&self, subreddit: &str, post_id: &str) -> RedditResult<Vec<Thing>> {
-        let uri = format!(
+    pub async fn get_post(&self, subreddit: &str, post_id: &str) -> Result<Vec<Thing>, Error> {
+        let url = format!(
             "https://www.reddit.com/r/{}/comments/{}.json",
             subreddit, post_id
-        )
-        .parse()?;
-        let body = self.get_bytes(uri).await?;
-
-        Ok(serde_json::from_slice(&body)?)
+        );
+        Ok(self
+            .client
+            .get(&url)
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?)
     }
 }
 
@@ -93,7 +61,7 @@ impl Default for Client {
 mod test {
     use super::*;
 
-    async fn get_subreddit(name: &str) -> RedditResult<()> {
+    async fn get_subreddit(name: &str) -> Result<(), Error> {
         let client = Client::new();
         // 25 is the default
         let subreddit = client.get_subreddit(name, 100).await?;

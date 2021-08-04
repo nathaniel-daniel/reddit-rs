@@ -4,18 +4,11 @@ pub mod types;
 
 pub use crate::{
     client::Client,
-    error::{
-        RedditError,
-        RedditResult,
-    },
+    error::Error,
     types::{
         Link,
         Listing,
         PostHint,
         Thing,
     },
-};
-pub use http::{
-    uri::InvalidUri,
-    StatusCode,
 };
