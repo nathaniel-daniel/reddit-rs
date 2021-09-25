@@ -25,7 +25,12 @@ impl Client {
     /// Create a new [`Client`] with a user-agent.
     ///
     /// See https://github.com/reddit-archive/reddit/wiki/API#rules
-    pub fn new_with_user_agent(platform: &str, app_id: &str, version: &str, reddit_username: &str) -> Self {
+    pub fn new_with_user_agent(
+        platform: &str,
+        app_id: &str,
+        version: &str,
+        reddit_username: &str,
+    ) -> Self {
         let user_agent = format!(
             "{platform}:{app_id}:{version} (by /u/{reddit_username})",
             platform = platform,
