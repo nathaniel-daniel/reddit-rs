@@ -18,15 +18,26 @@ allow-osi-fsf-free = "neither"
 confidence-threshold = 0.93
 default = "deny"
 private = { ignore = true }
-allow = [ "Apache-2.0", "MIT", "Zlib" ]
+allow = [ "Apache-2.0", "MIT", "Zlib", "ISC", "MPL-2.0", "OpenSSL" ]
+
+[[licenses.clarify]]
+name = "ring"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0eed23 },
+]
+
+[[licenses.clarify]]
+name = "webpki"
+expression = "ISC"
+license-files = [
+    { path = "LICENSE", hash = 0x001c7e6c },
+]
 
 [bans]
 multiple-versions = "deny"
 highlight = "all"
-skip = [    
-    # Blocked on tempfile updating cfg=if to 1.0.x
-    { name = "cfg-if", version = "0.1.10" },
-    
+skip = [        
     # Blocked on `miow` updating `socket` to `0.4.x`
     { name = "socket2", version = "0.3.19" },
 ]
