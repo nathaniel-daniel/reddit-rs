@@ -37,7 +37,10 @@ license-files = [
 [bans]
 multiple-versions = "deny"
 highlight = "all"
-skip = [        
+skip = [       
+    # Blocked on tempfile updating cfg=if to 1.0.x
+    { name = "cfg-if", version = "0.1.10" },
+    
     # Blocked on `miow` updating `socket` to `0.4.x`
     { name = "socket2", version = "0.3.19" },
 ]
