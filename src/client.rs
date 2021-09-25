@@ -13,7 +13,10 @@ impl Client {
     /// Create a new [`Client`]
     pub fn new() -> Self {
         Client {
-            client: reqwest::Client::new(),
+            client: reqwest::Client::builder()
+                .user_agent("reddit-rs")
+                .build()
+                .expect("failed to build reddit client"),
         }
     }
 
