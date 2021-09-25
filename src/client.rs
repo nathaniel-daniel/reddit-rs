@@ -12,9 +12,31 @@ pub struct Client {
 impl Client {
     /// Create a new [`Client`]
     pub fn new() -> Self {
-        Client {
+        // Just guess some good defaults.
+        // TODO: Extract from target
+        let platform = "pc";
+        let app_id = env!("CARGO_PKG_NAME");
+        let version = env!("CARGO_PKG_VERSION");
+        // TODO: Is there really a good default to choose here?
+        let reddit_username = "deleted";
+        Self::new_with_user_agent(platform, app_id, version, reddit_username)
+    }
+
+    /// Create a new [`Client`] with a user-agent.
+    ///
+    /// See https://github.com/reddit-archive/reddit/wiki/API#rules
+    pub fn new_with_user_agent(platform: &str, app_id: &str, version: &str, reddit_username: &str) -> Self {
+        let user_agent = format!(
+            "{platform}:{app_id}:{version} (by /u/{reddit_username})",
+            platform = platform,
+            app_id = app_id,
+            version = version,
+            reddit_username = reddit_username
+        );
+
+        Self {
             client: reqwest::Client::builder()
-                .user_agent("reddit-rs")
+                .user_agent(user_agent)
                 .build()
                 .expect("failed to build reddit client"),
         }
