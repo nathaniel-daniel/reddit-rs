@@ -12,3 +12,6 @@ pub use crate::{
         Thing,
     },
 };
+
+#[cfg(all(feature = "force-native-tls", feature = "force-rustls-tls"))]
+compile_error!("cannot enable `force-native-tls` and `force-rustls-tls` at once");

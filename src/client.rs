@@ -39,9 +39,21 @@ impl Client {
             reddit_username = reddit_username
         );
 
+        let mut client_builder = reqwest::Client::builder();
+        client_builder = client_builder.user_agent(user_agent);
+
+        #[cfg(feature = "force-native-tls")]
+        {
+            client_builder = client_builder.use_native_tls();
+        }
+
+        #[cfg(feature = "force-rustls-tls")]
+        {
+            client_builder = client_builder.use_rustls_tls();
+        }
+
         Self {
-            client: reqwest::Client::builder()
-                .user_agent(user_agent)
+            client: client_builder
                 .build()
                 .expect("failed to build reddit client"),
         }
