@@ -18,7 +18,7 @@ allow-osi-fsf-free = "neither"
 confidence-threshold = 0.93
 default = "deny"
 private = { ignore = true }
-allow = [ "Apache-2.0", "MIT", "Zlib", "ISC", "MPL-2.0", "OpenSSL" ]
+allow = [ "Apache-2.0", "MIT", "Zlib", "ISC", "MPL-2.0", "OpenSSL", "BSD-3-Clause" ]
 
 [[licenses.clarify]]
 name = "ring"
@@ -34,15 +34,20 @@ license-files = [
     { path = "LICENSE", hash = 0x001c7e6c },
 ]
 
+[[licenses.clarify]]
+name = "encoding_rs"
+version = "*"
+expression = "(Apache-2.0 OR MIT) AND BSD-3-Clause"
+license-files = [
+    { path = "COPYRIGHT", hash = 0x39f8ad31 }
+]
+
 [bans]
 multiple-versions = "deny"
 highlight = "all"
 skip = [       
-    # Blocked on tempfile updating cfg=if to 1.0.x
-    { name = "cfg-if", version = "0.1.10" },
-    
-    # Blocked on `miow` updating `socket` to `0.4.x`
-    { name = "socket2", version = "0.3.19" },
+    # Blocked on the ecosystem moving to itoa v1
+    { name = "itoa", version = "1.0.1" },
 ]
 
 [sources]
