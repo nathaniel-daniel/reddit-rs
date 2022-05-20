@@ -147,11 +147,19 @@ mod test {
                     let column = error.column();
 
                     // Try to get error in data
-                    let maybe_data = data
-                        .split('\n')
-                        .skip(line)
-                        .next()
-                        .map(|line| &line[column..]);
+                    let maybe_data =
+                        data.split('\n')
+                            .skip(line.saturating_sub(1))
+                            .next()
+                            .map(|line| {
+                                let start = column.saturating_sub(30);
+
+                                &line[start..]
+                            });
+
+                    let _ = tokio::fs::write("subreddit-error.json", data.as_bytes())
+                        .await
+                        .is_ok();
 
                     panic!(
                         "failed to get subreddit `{}`: {:#?}\ndata: {:?}",

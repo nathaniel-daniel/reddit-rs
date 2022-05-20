@@ -384,7 +384,7 @@ pub struct Link {
     /// Returns true if its a video
     pub is_video: bool,
 
-    pub link_flair_text_color: Box<str>,
+    pub link_flair_text_color: Option<Box<str>>,
     pub link_flair_type: Box<str>,
     pub media_only: bool,
     pub name: Box<str>,
@@ -456,6 +456,7 @@ mod test {
     const SUBREDDIT_SAMPLE_1: &str = include_str!("../test_data/subreddit_dankmemes.json");
     const SUBREDDIT_SAMPLE_2: &str = include_str!("../test_data/subreddit_cromch.json");
     const SUBREDDIT_SAMPLE_3: &str = include_str!("../test_data/subreddit_cuddleroll.json");
+    const SUBREDDIT_SAMPLE_4: &str = include_str!("../test_data/subreddit_cursed_images.json");
 
     const COMMENT_SAMPLE_1: &str = include_str!("../test_data/comment_h966lq.json");
     const COMMENT_SAMPLE_2: &str = include_str!("../test_data/comment_h8p0py.json");
@@ -475,6 +476,12 @@ mod test {
     #[test]
     fn parse_subreddit_3() {
         let res = serde_json::from_str::<Thing>(SUBREDDIT_SAMPLE_3).unwrap();
+        dbg!(res);
+    }
+
+    #[test]
+    fn parse_subreddit_4() {
+        let res = serde_json::from_str::<Thing>(SUBREDDIT_SAMPLE_4).unwrap();
         dbg!(res);
     }
 
