@@ -139,7 +139,7 @@ mod test {
             match get_subreddit(subreddit).await {
                 Ok(()) => {}
                 Err(error) => {
-                    panic!("failed to get subreddit `{}`: {:?}", subreddit, error);
+                    panic!("failed to get subreddit `{}`: {:#?}", subreddit, error);
                 }
             }
         }

@@ -454,12 +454,27 @@ mod test {
     use super::*;
 
     const SUBREDDIT_SAMPLE_1: &str = include_str!("../test_data/subreddit_dankmemes.json");
+    const SUBREDDIT_SAMPLE_2: &str = include_str!("../test_data/subreddit_cromch.json");
+    const SUBREDDIT_SAMPLE_3: &str = include_str!("../test_data/subreddit_cuddleroll.json");
+    
     const COMMENT_SAMPLE_1: &str = include_str!("../test_data/comment_h966lq.json");
     const COMMENT_SAMPLE_2: &str = include_str!("../test_data/comment_h8p0py.json");
 
     #[test]
-    fn parse_subreddit() {
+    fn parse_subreddit_1() {
         let res = serde_json::from_str::<Thing>(SUBREDDIT_SAMPLE_1).unwrap();
+        dbg!(res);
+    }
+    
+    #[test]
+    fn parse_subreddit_2() {
+        let res = serde_json::from_str::<Thing>(SUBREDDIT_SAMPLE_2).unwrap();
+        dbg!(res);
+    }
+    
+    #[test]
+    fn parse_subreddit_3() {
+        let res = serde_json::from_str::<Thing>(SUBREDDIT_SAMPLE_3).unwrap();
         dbg!(res);
     }
 
