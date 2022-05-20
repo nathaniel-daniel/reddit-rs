@@ -149,8 +149,7 @@ mod test {
                     // Try to get error in data
                     let maybe_data =
                         data.split('\n')
-                            .skip(line.saturating_sub(1))
-                            .next()
+                            .nth(line.saturating_sub(1))
                             .map(|line| {
                                 let start = column.saturating_sub(30);
 
