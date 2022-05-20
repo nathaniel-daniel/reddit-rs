@@ -147,14 +147,11 @@ mod test {
                     let column = error.column();
 
                     // Try to get error in data
-                    let maybe_data =
-                        data.split('\n')
-                            .nth(line.saturating_sub(1))
-                            .map(|line| {
-                                let start = column.saturating_sub(30);
+                    let maybe_data = data.split('\n').nth(line.saturating_sub(1)).map(|line| {
+                        let start = column.saturating_sub(30);
 
-                                &line[start..]
-                            });
+                        &line[start..]
+                    });
 
                     let _ = tokio::fs::write("subreddit-error.json", data.as_bytes())
                         .await
