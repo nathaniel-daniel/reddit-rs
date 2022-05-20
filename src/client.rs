@@ -142,6 +142,22 @@ mod test {
         for subreddit in subreddits.iter() {
             match get_subreddit(subreddit).await {
                 Ok(()) => {}
+                Err(Error::Json { data, error }) => {
+                    let line = error.line();
+                    let column = error.column();
+
+                    // Try to get error in data
+                    let maybe_data = data
+                        .split('\n')
+                        .skip(line)
+                        .next()
+                        .map(|line| &line[column..]);
+
+                    panic!(
+                        "failed to get subreddit `{}`: {:#?}\ndata: {:?}",
+                        subreddit, error, maybe_data
+                    );
+                }
                 Err(error) => {
                     panic!("failed to get subreddit `{}`: {:#?}", subreddit, error);
                 }
