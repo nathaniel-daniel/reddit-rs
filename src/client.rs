@@ -35,13 +35,7 @@ impl Client {
         version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!(
-            "{platform}:{app_id}:{version} (by /u/{reddit_username})",
-            platform = platform,
-            app_id = app_id,
-            version = version,
-            reddit_username = reddit_username
-        );
+        let user_agent = format!("{platform}:{app_id}:{version} (by /u/{reddit_username})",);
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
@@ -65,10 +59,7 @@ impl Client {
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.
     pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> Result<Thing, Error> {
-        let url = format!(
-            "https://www.reddit.com/r/{}.json?limit={}",
-            subreddit, num_posts
-        );
+        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}",);
         let res = self.client.get(&url).send().await?.error_for_status()?;
 
         // Reddit will redirect us here if the subreddit could not be found.
@@ -82,10 +73,7 @@ impl Client {
 
     /// Get the post data for a post from a given subreddit
     pub async fn get_post(&self, subreddit: &str, post_id: &str) -> Result<Vec<Thing>, Error> {
-        let url = format!(
-            "https://www.reddit.com/r/{}/comments/{}.json",
-            subreddit, post_id
-        );
+        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json",);
         Ok(self
             .client
             .get(&url)
@@ -111,7 +99,10 @@ mod test {
         let client = Client::new();
         // 25 is the default
         let subreddit = client.get_subreddit(name, 100).await?;
-        println!("# of children: {}", subreddit.data.as_listing().unwrap().children.len());
+        println!(
+            "# of children: {}",
+            subreddit.data.as_listing().unwrap().children.len()
+        );
         Ok(())
     }
 
