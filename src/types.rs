@@ -5,10 +5,10 @@
 #[derive(Debug, serde::Deserialize)]
 pub struct Thing {
     /// this item's identifier, e.g. "8xwlg"
-    pub id: Option<String>,
+    pub id: Option<Box<str>>,
 
     /// Fullname of comment, e.g. "t1_c3v7f8u"
-    pub name: Option<String>,
+    pub name: Option<Box<str>>,
 
     /// Data
     #[serde(flatten)]
@@ -95,15 +95,15 @@ impl ThingData {
 #[derive(Debug, serde::Deserialize)]
 pub struct Listing {
     /// The fullname of the listing that follows before this page. null if there is no previous page.
-    pub before: Option<String>,
+    pub before: Option<Box<str>>,
 
     /// The fullname of the listing that follows after this page. null if there is no next page.
-    pub after: Option<String>,
+    pub after: Option<Box<str>>,
 
     /// This modhash is not the same modhash provided upon login.
     /// You do not need to update your user's modhash everytime you get a new modhash.
     /// You can reuse the modhash given upon login.
-    pub modhash: String,
+    pub modhash: Box<str>,
 
     /// A list of things that this Listing wraps.
     pub children: Vec<Thing>,
@@ -142,29 +142,29 @@ pub struct Created {
 #[derive(Debug, serde::Deserialize)]
 pub struct Comment {
     /// who approved this comment. null if nobody or you are not a mod
-    pub approved_by: Option<String>,
+    pub approved_by: Option<Box<str>>,
 
     /// the account name of the poster
-    pub author: String,
+    pub author: Box<str>,
 
     /// the CSS class of the author's flair. subreddit specific
-    pub author_flair_css_class: Option<String>,
+    pub author_flair_css_class: Option<Box<str>>,
 
     /// the text of the author's flair. subreddit specific
-    pub author_flair_text: Option<String>,
+    pub author_flair_text: Option<Box<str>>,
 
     /// who removed this comment. null if nobody or you are not a mod
-    pub banned_by: Option<String>,
+    pub banned_by: Option<Box<str>>,
 
     /// the raw text.
     /// this is the unformatted text which includes the raw markup characters such as ** for bold. <, >, and & are escaped.
-    pub body: String,
+    pub body: Box<str>,
 
     /// the formatted HTML text as displayed on reddit.
     /// For example, text that is emphasised by * will now have <em> tags wrapping it.
     /// Additionally, bullets and numbered lists will now be in HTML list format.
     /// NOTE: The HTML string will be escaped. You must unescape to get the raw HTML.
-    pub body_html: String,
+    pub body_html: Box<str>,
 
     /// false if not edited, edit date in UTC epoch-seconds otherwise.
     /// NOTE: for some old edited comments on reddit.com, this will be set to true instead of edit date.
@@ -178,24 +178,24 @@ pub struct Comment {
 
     /// present if the comment is being displayed outside its thread (user pages, /r/subreddit/comments/.json, etc.).
     /// Contains the author of the parent link
-    pub link_author: Option<String>,
+    pub link_author: Option<Box<str>>,
 
     /// ID of the link this comment is in
-    pub link_id: String,
+    pub link_id: Box<str>,
 
     /// present if the comment is being displayed outside its thread (user pages, /r/subreddit/comments/.json, etc.).
     /// Contains the title of the parent link
-    pub link_title: Option<String>,
+    pub link_title: Option<Box<str>>,
 
     /// present if the comment is being displayed outside its thread (user pages, /r/subreddit/comments/.json, etc.).
     /// Contains the URL of the parent link
-    pub link_url: Option<String>,
+    pub link_url: Option<Box<str>>,
 
     /// how many times this comment has been reported, null if not a mod
     pub num_reports: Option<u64>,
 
     /// ID of the thing this comment is a reply to, either the link or a comment in it
-    pub parent_id: String,
+    pub parent_id: Box<str>,
 
     // TODO: Find out why this is a string sometimes
     /// A list of replies to this comment
@@ -211,17 +211,17 @@ pub struct Comment {
     pub score_hidden: bool,
 
     /// subreddit of thing excluding the /r/ prefix. "pics"
-    pub subreddit: String,
+    pub subreddit: Box<str>,
 
     /// the id of the subreddit in which the thing is locatedss
-    pub subreddit_id: String,
+    pub subreddit_id: Box<str>,
 
     /// to allow determining whether they have been distinguished by moderators/admins.
     /// null = not distinguished.
     /// moderator = the green \[M\].
     /// admin = the red \[A\].
     /// special = various other special distinguishes http://redd.it/19ak1b
-    pub distinguished: Option<String>,
+    pub distinguished: Option<Box<str>>,
 
     /// Voting Implementation
     #[serde(flatten)]
@@ -240,20 +240,20 @@ pub struct Comment {
 #[derive(Debug, serde::Deserialize)]
 pub struct Link {
     /// the account name of the poster. null if this is a promotional link
-    pub author: String,
+    pub author: Box<str>,
 
     /// the CSS class of the author's flair. subreddit specific
-    pub author_flair_css_class: Option<String>,
+    pub author_flair_css_class: Option<Box<str>>,
 
     /// the text of the author's flair. subreddit specific
-    pub author_flair_text: Option<String>,
+    pub author_flair_text: Option<Box<str>>,
 
     /// probably always returns false
     pub clicked: bool,
 
     /// the domain of this link.
     /// Self posts will be self.<subreddit> while other examples include en.wikipedia.org and s3.amazon.com
-    pub domain: String,
+    pub domain: Box<str>,
 
     /// true if the post is hidden by the logged in user. false if not logged in or not hidden.
     pub hidden: bool,
@@ -265,10 +265,10 @@ pub struct Link {
     pub likes: Option<bool>,
 
     /// the CSS class of the link's flair.
-    pub link_flair_css_class: Option<String>,
+    pub link_flair_css_class: Option<Box<str>>,
 
     /// the text of the link's flair.
-    pub link_flair_text: Option<String>,
+    pub link_flair_text: Option<Box<str>>,
 
     /// whether the link is locked (closed to new comments) or not.
     pub locked: bool,
@@ -288,7 +288,7 @@ pub struct Link {
     pub over_18: bool,
 
     /// relative URL of the permanent link for this link
-    pub permalink: String,
+    pub permalink: Box<str>,
 
     /// true if this post is saved by the logged in user
     pub saved: bool,
@@ -306,32 +306,32 @@ pub struct Link {
     /// this is the unformatted text which includes the raw markup characters such as ** for bold.
     /// <, >, and & are escaped.
     /// Empty if not present.
-    pub selftext: String,
+    pub selftext: Box<str>,
 
     /// the formatted escaped HTML text.
     /// this is the HTML formatted version of the marked up text.
     /// Items that are boldened by ** or *** will now have <em> or *** tags on them.
     /// Additionally, bullets and numbered lists will now be in HTML list format.
     /// NOTE: The HTML string will be escaped. You must unescape to get the raw HTML. Null if not present.
-    pub selftext_html: Option<String>,
+    pub selftext_html: Option<Box<str>>,
 
     /// subreddit of thing excluding the /r/ prefix. "pics"
-    pub subreddit: String,
+    pub subreddit: Box<str>,
 
     /// the id of the subreddit in which the thing is located
-    pub subreddit_id: String,
+    pub subreddit_id: Box<str>,
 
     /// full URL to the thumbnail for this link;
     /// "self" if this is a self post;
     /// "image" if this is a link to an image but has no thumbnail;
     /// "default" if a thumbnail is not available
-    pub thumbnail: String,
+    pub thumbnail: Box<str>,
 
     /// the title of the link. may contain newlines for some reason
-    pub title: String,
+    pub title: Box<str>,
 
     /// the link of this post. the permalink if this is a self-post. May be a relative Url.
-    pub url: String,
+    pub url: Box<str>,
 
     /// Indicates if link has been edited.
     /// Will be the edit timestamp if the link has been edited and return false otherwise.
@@ -344,7 +344,7 @@ pub struct Link {
     /// admin = the red \[A\].
     /// special = various other special distinguishes
     /// http://bit.ly/ZYI47B
-    pub distinguished: Option<String>,
+    pub distinguished: Option<Box<str>>,
 
     /// true if the post is set as the sticky in its subreddit.
     pub stickied: bool,
@@ -360,10 +360,10 @@ pub struct Link {
     // Experimentally determined fields
     // TODO: These are VERY best-effort, but i should still try to document what i can
     pub archived: bool,
-    pub author_flair_template_id: Option<String>,
-    pub author_flair_text_color: Option<String>,
-    pub author_flair_type: Option<String>,
-    pub author_fullname: Option<String>,
+    pub author_flair_template_id: Option<Box<str>>,
+    pub author_flair_text_color: Option<Box<str>>,
+    pub author_flair_type: Option<Box<str>>,
+    pub author_fullname: Option<Box<str>>,
     pub author_patreon_flair: Option<bool>,
     pub can_gild: bool,
     pub can_mod_post: bool,
@@ -374,7 +374,7 @@ pub struct Link {
 
     pub gilded: u64,
     pub hide_score: bool,
-    pub id: String,
+    pub id: Box<str>,
     pub is_crosspostable: bool,
     pub is_meta: bool,
     pub is_original_content: bool,
@@ -384,13 +384,13 @@ pub struct Link {
     /// Returns true if its a video
     pub is_video: bool,
 
-    pub link_flair_text_color: String,
-    pub link_flair_type: String,
+    pub link_flair_text_color: Box<str>,
+    pub link_flair_type: Box<str>,
     pub media_only: bool,
-    pub name: String,
+    pub name: Box<str>,
     pub no_follow: bool,
     pub num_crossposts: u64,
-    pub parent_whitelist_status: Option<String>,
+    pub parent_whitelist_status: Option<Box<str>>,
 
     /// Whether this post is pinned
     pub pinned: bool,
@@ -405,14 +405,14 @@ pub struct Link {
     /// Whether this post has a spoiler
     pub spoiler: bool,
 
-    pub subreddit_name_prefixed: String,
+    pub subreddit_name_prefixed: Box<str>,
     pub subreddit_subscribers: u64,
-    pub subreddit_type: String,
-    pub suggested_sort: Option<String>,
+    pub subreddit_type: Box<str>,
+    pub suggested_sort: Option<Box<str>>,
     pub thumbnail_height: Option<u32>,
     pub thumbnail_width: Option<u32>,
     pub visited: bool,
-    pub whitelist_status: Option<String>,
+    pub whitelist_status: Option<Box<str>>,
     pub wls: Option<u32>,
 }
 
@@ -421,7 +421,7 @@ pub struct Link {
 #[derive(Debug, serde::Deserialize)]
 pub struct More {
     /// A list of String ids that are the additional things that can be downloaded but are not because there are too many to list.
-    pub children: Vec<String>,
+    pub children: Vec<Box<str>>,
 }
 
 /// Info on what the post may contain
