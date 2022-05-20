@@ -202,19 +202,8 @@ sdist/
 develop-eggs/
 .installed.cfg
 
-
-#NPM
-node_modules
-
-#############
-PERSONAL#####
-#############
 token.txt
 config.toml
-
-#Added by cargo
-#
-#already existing elements are commented out
-
 /target
 **/*.rs.bk
+subreddit-error.json

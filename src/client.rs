@@ -6,7 +6,11 @@ use crate::{
 /// A client to access reddit
 #[derive(Clone)]
 pub struct Client {
-    client: reqwest::Client,
+    /// The inner http client.
+    ///
+    /// It probably shouldn't be used directly by you.
+    /// It also sets a strange user-agent as well in accordance with reddit's request.
+    pub client: reqwest::Client,
 }
 
 impl Client {
@@ -31,13 +35,7 @@ impl Client {
         version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!(
-            "{platform}:{app_id}:{version} (by /u/{reddit_username})",
-            platform = platform,
-            app_id = app_id,
-            version = version,
-            reddit_username = reddit_username
-        );
+        let user_agent = format!("{platform}:{app_id}:{version} (by /u/{reddit_username})",);
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
@@ -61,10 +59,7 @@ impl Client {
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.
     pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> Result<Thing, Error> {
-        let url = format!(
-            "https://www.reddit.com/r/{}.json?limit={}",
-            subreddit, num_posts
-        );
+        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}",);
         let res = self.client.get(&url).send().await?.error_for_status()?;
 
         // Reddit will redirect us here if the subreddit could not be found.
@@ -73,15 +68,16 @@ impl Client {
             return Err(Error::SubredditNotFound);
         }
 
-        Ok(res.json().await?)
+        let text = res.text().await?;
+        serde_json::from_str(&text).map_err(|error| Error::Json {
+            data: text.into(),
+            error,
+        })
     }
 
     /// Get the post data for a post from a given subreddit
     pub async fn get_post(&self, subreddit: &str, post_id: &str) -> Result<Vec<Thing>, Error> {
-        let url = format!(
-            "https://www.reddit.com/r/{}/comments/{}.json",
-            subreddit, post_id
-        );
+        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json",);
         Ok(self
             .client
             .get(&url)
@@ -107,7 +103,10 @@ mod test {
         let client = Client::new();
         // 25 is the default
         let subreddit = client.get_subreddit(name, 100).await?;
-        println!("{}", subreddit.data.as_listing().unwrap().children.len());
+        println!(
+            "# of children: {}",
+            subreddit.data.as_listing().unwrap().children.len()
+        );
         Ok(())
     }
 
@@ -141,7 +140,32 @@ mod test {
         ];
 
         for subreddit in subreddits.iter() {
-            get_subreddit(subreddit).await.unwrap();
+            match get_subreddit(subreddit).await {
+                Ok(()) => {}
+                Err(Error::Json { data, error }) => {
+                    let line = error.line();
+                    let column = error.column();
+
+                    // Try to get error in data
+                    let maybe_data = data.split('\n').nth(line.saturating_sub(1)).map(|line| {
+                        let start = column.saturating_sub(30);
+
+                        &line[start..]
+                    });
+
+                    let _ = tokio::fs::write("subreddit-error.json", data.as_bytes())
+                        .await
+                        .is_ok();
+
+                    panic!(
+                        "failed to get subreddit `{}`: {:#?}\ndata: {:?}",
+                        subreddit, error, maybe_data
+                    );
+                }
+                Err(error) => {
+                    panic!("failed to get subreddit `{}`: {:#?}", subreddit, error);
+                }
+            }
         }
     }
 
