@@ -4,6 +4,17 @@ pub enum Error {
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
 
+    /// Json parse error
+    #[error("failed to parse json")]
+    Json {
+        /// The data that was being parsed
+        data: Box<str>,
+
+        /// The parse error
+        #[source]
+        error: serde_json::Error,
+    },
+
     /// Failed to find subreddit
     #[error("failed to locate the subreddit")]
     SubredditNotFound,

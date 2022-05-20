@@ -68,7 +68,11 @@ impl Client {
             return Err(Error::SubredditNotFound);
         }
 
-        Ok(res.json().await?)
+        let text = res.text().await?;
+        serde_json::from_str(&text).map_err(|error| Error::Json {
+            data: text.into(),
+            error,
+        })
     }
 
     /// Get the post data for a post from a given subreddit
