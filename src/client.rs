@@ -111,7 +111,7 @@ mod test {
         let client = Client::new();
         // 25 is the default
         let subreddit = client.get_subreddit(name, 100).await?;
-        println!("{}", subreddit.data.as_listing().unwrap().children.len());
+        println!("# of children: {}", subreddit.data.as_listing().unwrap().children.len());
         Ok(())
     }
 
@@ -145,7 +145,12 @@ mod test {
         ];
 
         for subreddit in subreddits.iter() {
-            get_subreddit(subreddit).await.unwrap();
+            match get_subreddit(subreddit).await {
+                Ok(()) => {}
+                Err(error) => {
+                    panic!("failed to get subreddit `{}`: {:?}", subreddit, error);
+                }
+            }
         }
     }
 
