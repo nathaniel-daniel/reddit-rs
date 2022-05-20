@@ -6,7 +6,11 @@ use crate::{
 /// A client to access reddit
 #[derive(Clone)]
 pub struct Client {
-    client: reqwest::Client,
+    /// The inner http client. 
+    /// 
+    /// It probably shouldn't be used directly by you. 
+    /// It also sets a strange user-agent as well in accordance with reddit's request.
+    pub client: reqwest::Client,
 }
 
 impl Client {
