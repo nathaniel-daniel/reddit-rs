@@ -425,7 +425,7 @@ pub struct More {
 }
 
 /// Info on what the post may contain
-#[derive(Debug, serde::Deserialize, PartialEq)]
+#[derive(Debug, serde::Deserialize, PartialEq, Eq)]
 pub enum PostHint {
     /// The post is an image
     #[serde(rename = "image")]
