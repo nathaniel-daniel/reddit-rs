@@ -7,38 +7,17 @@ name: Rust
     branches:
       - master
 jobs:
-  lint:
+  Lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          components: rustfmt, clippy 
-          override: true
+     - name: Clippy
+       run: cargo clippy --tests -- -D warnings
           
-      - name: RustFmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: '-- --check --color always'
-          
-      - name: Fetch
-        uses: actions-rs/cargo@v1
-        with:
-          command: fetch
-          
-      - name: Clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: '--tests -- -D warnings'
-          
-  cargo-deny:
+  Deny:
     name: Deny
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +27,7 @@ jobs:
       - name: Deny
         uses: EmbarkStudios/cargo-deny-action@v1
         
-  build:
+  Build:
     name: Build
     runs-on: ubuntu-latest
     steps:
