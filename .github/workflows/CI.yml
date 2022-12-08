@@ -14,8 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         
-     - name: Clippy
-       run: cargo clippy --tests -- -D warnings
+      - name: Clippy
+        run: cargo clippy --tests -- -D warnings
           
   Deny:
     name: Deny
