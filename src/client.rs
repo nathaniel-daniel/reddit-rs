@@ -120,7 +120,10 @@ mod test {
         let client = Client::new();
 
         for (subreddit, post_id) in post_data.iter() {
-            let post = client.get_post(subreddit, post_id).await.expect("failed to get post");
+            let post = client
+                .get_post(subreddit, post_id)
+                .await
+                .expect("failed to get post");
             dbg!(&post);
         }
     }

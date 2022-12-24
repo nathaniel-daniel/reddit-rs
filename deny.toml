@@ -48,6 +48,10 @@ highlight = "all"
 skip = [       
     # Blocked on the ecosystem moving to itoa v1
     { name = "itoa", version = "1.0.1" },
+    
+    # Blocked on mio updating windows-sys to 0.42.0
+    { name = "windows-sys", version = "0.36.1" },
+    { name = "windows_x86_64_msvc", version = "0.36.1" },
 ]
 
 [sources]
