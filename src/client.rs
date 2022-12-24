@@ -114,14 +114,14 @@ mod test {
     async fn get_post_works() {
         let post_data = [
             ("dankmemes", "h966lq"),
-            ("dankvideos", "h8p0py"),
+            // ("dankvideos", "h8p0py"), // Subreddit got privated, last tested 12/23/2022. Uncomment in the future to see if that is still the case.
             ("oddlysatisfying", "ha7obv"),
         ];
         let client = Client::new();
 
         for (subreddit, post_id) in post_data.iter() {
-            let res = client.get_post(subreddit, post_id).await.unwrap();
-            dbg!(res);
+            let post = client.get_post(subreddit, post_id).await.expect("failed to get post");
+            dbg!(&post);
         }
     }
 
