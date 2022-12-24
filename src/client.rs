@@ -35,7 +35,7 @@ impl Client {
         version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!("{platform}:{app_id}:{version} (by /u/{reddit_username})",);
+        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})",);
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
@@ -114,14 +114,14 @@ mod test {
     async fn get_post_works() {
         let post_data = [
             ("dankmemes", "h966lq"),
-            ("dankvideos", "h8p0py"),
+            // ("dankvideos", "h8p0py"), // Subreddit got privated, last tested 12/23/2022. Uncomment in the future to see if that is still the case.
             ("oddlysatisfying", "ha7obv"),
         ];
         let client = Client::new();
 
         for (subreddit, post_id) in post_data.iter() {
-            let res = client.get_post(subreddit, post_id).await.unwrap();
-            dbg!(res);
+            let post = client.get_post(subreddit, post_id).await.expect("failed to get post");
+            dbg!(&post);
         }
     }
 
