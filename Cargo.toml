@@ -16,7 +16,7 @@ url = { version = "2.3.1", features = [ "serde" ] }
 tokio = { version = "1.22.0", features = [ "macros", "fs" ] }
 
 [features]
-default = [ "rustls-tls" ]
+default = [ "native-tls" ]
 
 native-tls = [ "reqwest/native-tls" ]
 rustls-tls = [ "reqwest/rustls-tls" ]

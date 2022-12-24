@@ -35,7 +35,7 @@ impl Client {
         version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!("{platform}:{app_id}:{version} (by /u/{reddit_username})",);
+        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})",);
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
