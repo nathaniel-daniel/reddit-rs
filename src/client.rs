@@ -3,6 +3,17 @@ use crate::{
     types::Thing,
 };
 
+// Guesses for good defaults for the user agent.
+
+// TODO: Extract from target
+const DEFAULT_PLATFORM: &str = "pc";
+
+const DEFAULT_APP_ID: &str = env!("CARGO_PKG_NAME");
+const DEFAULT_APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+// TODO: Is there really a good default to choose here?
+const DEFAULT_REDDIT_USERNAME: &str = "deleted";
+
 /// A client to access reddit
 #[derive(Clone)]
 pub struct Client {
@@ -14,16 +25,14 @@ pub struct Client {
 }
 
 impl Client {
-    /// Create a new [`Client`]
+    /// Create a new [`Client`].
     pub fn new() -> Self {
-        // Just guess some good defaults.
-        // TODO: Extract from target
-        let platform = "pc";
-        let app_id = env!("CARGO_PKG_NAME");
-        let version = env!("CARGO_PKG_VERSION");
-        // TODO: Is there really a good default to choose here?
-        let reddit_username = "deleted";
-        Self::new_with_user_agent(platform, app_id, version, reddit_username)
+        Self::new_with_user_agent(
+            DEFAULT_PLATFORM,
+            DEFAULT_APP_ID,
+            DEFAULT_APP_VERSION,
+            DEFAULT_REDDIT_USERNAME,
+        )
     }
 
     /// Create a new [`Client`] with a user-agent.
@@ -32,34 +41,24 @@ impl Client {
     pub fn new_with_user_agent(
         platform: &str,
         app_id: &str,
-        version: &str,
+        app_version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})",);
+        let user_agent = format!("{platform}:{app_id}:v{app_version} (by /u/{reddit_username})");
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
 
-        #[cfg(feature = "force-native-tls")]
-        {
-            client_builder = client_builder.use_native_tls();
-        }
+        let client = client_builder
+            .build()
+            .expect("failed to build reddit client");
 
-        #[cfg(feature = "force-rustls-tls")]
-        {
-            client_builder = client_builder.use_rustls_tls();
-        }
-
-        Self {
-            client: client_builder
-                .build()
-                .expect("failed to build reddit client"),
-        }
+        Self { client }
     }
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.
     pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> Result<Thing, Error> {
-        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}",);
+        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}");
         let res = self.client.get(&url).send().await?.error_for_status()?;
 
         // Reddit will redirect us here if the subreddit could not be found.
@@ -77,7 +76,7 @@ impl Client {
 
     /// Get the post data for a post from a given subreddit
     pub async fn get_post(&self, subreddit: &str, post_id: &str) -> Result<Vec<Thing>, Error> {
-        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json",);
+        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json");
         Ok(self
             .client
             .get(&url)
@@ -161,12 +160,11 @@ mod test {
                         .is_ok();
 
                     panic!(
-                        "failed to get subreddit `{}`: {:#?}\ndata: {:?}",
-                        subreddit, error, maybe_data
+                        "failed to get subreddit \"{subreddit}\": {error:#?}\ndata: {maybe_data:?}"
                     );
                 }
                 Err(error) => {
-                    panic!("failed to get subreddit `{}`: {:#?}", subreddit, error);
+                    panic!("failed to get subreddit \"{subreddit}\": {error:#?}");
                 }
             }
         }
@@ -175,7 +173,7 @@ mod test {
     #[tokio::test]
     async fn invalid_subreddit() {
         let client = Client::new();
-        let err = client.get_subreddit("gfdghfj", 25).await.unwrap_err();
-        assert!(err.is_subreddit_not_found(), "err = {:#?}", err);
+        let error = client.get_subreddit("gfdghfj", 25).await.unwrap_err();
+        assert!(error.is_subreddit_not_found(), "error = {error:#?}");
     }
 }
