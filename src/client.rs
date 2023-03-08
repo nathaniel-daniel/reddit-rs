@@ -35,7 +35,7 @@ impl Client {
         version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})",);
+        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})");
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
@@ -59,7 +59,7 @@ impl Client {
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.
     pub async fn get_subreddit(&self, subreddit: &str, num_posts: usize) -> Result<Thing, Error> {
-        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}",);
+        let url = format!("https://www.reddit.com/r/{subreddit}.json?limit={num_posts}");
         let res = self.client.get(&url).send().await?.error_for_status()?;
 
         // Reddit will redirect us here if the subreddit could not be found.
@@ -77,7 +77,7 @@ impl Client {
 
     /// Get the post data for a post from a given subreddit
     pub async fn get_post(&self, subreddit: &str, post_id: &str) -> Result<Vec<Thing>, Error> {
-        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json",);
+        let url = format!("https://www.reddit.com/r/{subreddit}/comments/{post_id}.json");
         Ok(self
             .client
             .get(&url)
@@ -161,12 +161,11 @@ mod test {
                         .is_ok();
 
                     panic!(
-                        "failed to get subreddit `{}`: {:#?}\ndata: {:?}",
-                        subreddit, error, maybe_data
+                        "failed to get subreddit \"{subreddit}\": {error:#?}\ndata: {maybe_data:?}"
                     );
                 }
                 Err(error) => {
-                    panic!("failed to get subreddit `{}`: {:#?}", subreddit, error);
+                    panic!("failed to get subreddit \"{subreddit}\": {error:#?}");
                 }
             }
         }
@@ -175,7 +174,7 @@ mod test {
     #[tokio::test]
     async fn invalid_subreddit() {
         let client = Client::new();
-        let err = client.get_subreddit("gfdghfj", 25).await.unwrap_err();
-        assert!(err.is_subreddit_not_found(), "err = {:#?}", err);
+        let error = client.get_subreddit("gfdghfj", 25).await.unwrap_err();
+        assert!(error.is_subreddit_not_found(), "error = {error:#?}");
     }
 }
