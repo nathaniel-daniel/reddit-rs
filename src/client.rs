@@ -49,21 +49,11 @@ impl Client {
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
 
-        #[cfg(feature = "force-native-tls")]
-        {
-            client_builder = client_builder.use_native_tls();
-        }
+        let client = client_builder
+            .build()
+            .expect("failed to build reddit client");
 
-        #[cfg(feature = "force-rustls-tls")]
-        {
-            client_builder = client_builder.use_rustls_tls();
-        }
-
-        Self {
-            client: client_builder
-                .build()
-                .expect("failed to build reddit client"),
-        }
+        Self { client }
     }
 
     /// Get the top posts of a subreddit where subreddit is the name and num_posts is the number of posts to retrieve.

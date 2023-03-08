@@ -20,6 +20,3 @@ default = [ "native-tls" ]
 
 native-tls = [ "reqwest/native-tls" ]
 rustls-tls = [ "reqwest/rustls-tls" ]
-
-force-native-tls = [ "native-tls" ]
-force-rustls-tls = [ "rustls-tls" ]
