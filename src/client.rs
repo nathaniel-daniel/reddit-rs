@@ -3,6 +3,17 @@ use crate::{
     types::Thing,
 };
 
+// Guesses for good defaults for the user agent.
+
+// TODO: Extract from target
+const DEFAULT_PLATFORM: &str = "pc";
+
+const DEFAULT_APP_ID: &str = env!("CARGO_PKG_NAME");
+const DEFAULT_APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+// TODO: Is there really a good default to choose here?
+const DEFAULT_REDDIT_USERNAME: &str = "deleted";
+
 /// A client to access reddit
 #[derive(Clone)]
 pub struct Client {
@@ -14,16 +25,14 @@ pub struct Client {
 }
 
 impl Client {
-    /// Create a new [`Client`]
+    /// Create a new [`Client`].
     pub fn new() -> Self {
-        // Just guess some good defaults.
-        // TODO: Extract from target
-        let platform = "pc";
-        let app_id = env!("CARGO_PKG_NAME");
-        let version = env!("CARGO_PKG_VERSION");
-        // TODO: Is there really a good default to choose here?
-        let reddit_username = "deleted";
-        Self::new_with_user_agent(platform, app_id, version, reddit_username)
+        Self::new_with_user_agent(
+            DEFAULT_PLATFORM,
+            DEFAULT_APP_ID,
+            DEFAULT_APP_VERSION,
+            DEFAULT_REDDIT_USERNAME,
+        )
     }
 
     /// Create a new [`Client`] with a user-agent.
@@ -32,10 +41,10 @@ impl Client {
     pub fn new_with_user_agent(
         platform: &str,
         app_id: &str,
-        version: &str,
+        app_version: &str,
         reddit_username: &str,
     ) -> Self {
-        let user_agent = format!("{platform}:{app_id}:v{version} (by /u/{reddit_username})");
+        let user_agent = format!("{platform}:{app_id}:v{app_version} (by /u/{reddit_username})");
 
         let mut client_builder = reqwest::Client::builder();
         client_builder = client_builder.user_agent(user_agent);
