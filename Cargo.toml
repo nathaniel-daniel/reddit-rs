@@ -13,7 +13,7 @@ thiserror = "1.0.39"
 url = { version = "2.4.0", features = [ "serde" ] }
 
 [dev-dependencies]
-tokio = { version = "1.26.0", features = [ "macros", "fs" ] }
+tokio = { version = "1.29.1", features = [ "macros", "fs" ] }
 
 [features]
 default = [ "native-tls" ]
