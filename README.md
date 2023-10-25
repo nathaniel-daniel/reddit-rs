@@ -1,5 +1,19 @@
 # reddit-rs
 A basic reddit client lib for Rust.
+This library currently allows users to fetch posts from subreddits.
+
+## Example
+```rust
+#[tokio::main]
+async fn main() {
+    let client = reddit::Client::new();
+    
+    /// Fetch 100 posts from the "aww" subreddit
+    let subreddit = client.get_subreddit("aww", 100).await.expect("failed to get subreddit");
+
+    dbg!(subreddit);
+}
+```
 
 ## Documentation
 Master: <https://nathaniel-daniel.github.io/reddit-rs/reddit/>
