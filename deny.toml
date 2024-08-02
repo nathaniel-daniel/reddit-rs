@@ -1,3 +1,4 @@
+[graph]
 targets = [
     { triple = "x86_64-unknown-linux-gnu" },
     { triple = "x86_64-unknown-linux-musl" },
@@ -6,17 +7,10 @@ targets = [
 ]
 
 [advisories]
-vulnerability = "deny"
-unmaintained = "deny"
-notice = "deny"
 ignore = []
 
 [licenses]
-unlicensed = "deny"
-copyleft = "warn"
-allow-osi-fsf-free = "neither"
 confidence-threshold = 0.93
-default = "deny"
 private = { ignore = true }
 allow = [ "Apache-2.0", "MIT", "Zlib", "ISC", "MPL-2.0", "OpenSSL", "BSD-3-Clause", "Unicode-DFS-2016" ]
 
@@ -46,8 +40,10 @@ license-files = [
 multiple-versions = "warn"
 highlight = "all"
 skip = [
-    { name = "bitflags", version = "1.3.2" },
-    { name = "socket2", version = "0.4.10" },
+    { name = "windows_x86_64_msvc", version = "0.48.5" },
+    { name = "windows_x86_64_gnu",  version = "0.48.5" },
+    { name = "windows-targets", version = "0.48.5" },
+    { name = "windows-sys", version = "0.48.0" },
 ]
 
 [sources]

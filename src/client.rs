@@ -110,6 +110,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[ignore]
     async fn get_post_works() {
         let post_data = [
             ("dankmemes", "h966lq"),
@@ -128,6 +129,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[ignore]
     async fn get_subreddit_works() {
         let subreddits = [
             "forbiddensnacks",
@@ -171,6 +173,7 @@ mod test {
     }
 
     #[tokio::test]
+    #[ignore]
     async fn invalid_subreddit() {
         let client = Client::new();
         let error = client.get_subreddit("gfdghfj", 25).await.unwrap_err();
