@@ -198,7 +198,7 @@ pub struct Comment {
     pub parent_id: Box<str>,
 
     // TODO: Find out why this is a string sometimes
-    /// A list of replies to this comment
+    // /// A list of replies to this comment
     // pub replies: Thing,
 
     /// true if this post is saved by the logged in user
