@@ -200,7 +200,6 @@ pub struct Comment {
     // TODO: Find out why this is a string sometimes
     // /// A list of replies to this comment
     // pub replies: Thing,
-
     /// true if this post is saved by the logged in user
     pub saved: bool,
 
@@ -316,7 +315,7 @@ pub struct Link {
     pub selftext_html: Option<Box<str>>,
 
     /// subreddit of thing excluding the /r/ prefix. "pics"
-    pub subreddit: Box<str>,
+    pub subreddit: Option<Box<str>>,
 
     /// the id of the subreddit in which the thing is located
     pub subreddit_id: Box<str>,
@@ -325,7 +324,7 @@ pub struct Link {
     /// "self" if this is a self post;
     /// "image" if this is a link to an image but has no thumbnail;
     /// "default" if a thumbnail is not available
-    pub thumbnail: Box<str>,
+    pub thumbnail: Option<Box<str>>,
 
     /// the title of the link. may contain newlines for some reason
     pub title: Box<str>,
