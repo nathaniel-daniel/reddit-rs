@@ -12,7 +12,15 @@ ignore = []
 [licenses]
 confidence-threshold = 0.93
 private = { ignore = true }
-allow = [ "Apache-2.0", "MIT", "ISC", "MPL-2.0", "BSD-3-Clause", "OpenSSL", "Unicode-3.0" ]
+allow = [
+    "Apache-2.0",
+    "BSD-3-Clause",
+    "ISC",
+    "MIT", 
+    "MPL-2.0",
+    "OpenSSL",
+    "Unicode-3.0",
+]
 
 [[licenses.clarify]]
 name = "ring"
@@ -40,10 +48,8 @@ license-files = [
 multiple-versions = "warn"
 highlight = "all"
 skip = [
-    { name = "windows_x86_64_msvc", version = "0.52.0" },
-    { name = "windows_x86_64_gnu",  version = "0.52.0" },
-    { name = "windows-targets", version = "0.52.0" },
-    { name = "windows-sys", version = "0.52.0" },
+    { name = "windows-sys", version = "0.60.2" },
+    
 ]
 
 [sources]

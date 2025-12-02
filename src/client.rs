@@ -97,6 +97,7 @@ impl Default for Client {
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::Listing;
 
     async fn get_subreddit(name: &str) -> Result<(), Error> {
         let client = Client::new();
@@ -141,29 +142,29 @@ mod test {
             "cats",
             "cursed_images",
             "aww",
+            "dogpictures",
         ];
 
         for subreddit in subreddits.iter() {
             match get_subreddit(subreddit).await {
                 Ok(()) => {}
-                Err(Error::Json { data, error }) => {
-                    let line = error.line();
-                    let column = error.column();
+                Err(Error::Json { data, .. }) => {
+                    /// See: https://github.com/dtolnay/path-to-error/issues/1
+                    #[derive(Debug, serde::Deserialize)]
+                    struct Subreddit {
+                        #[expect(dead_code)]
+                        data: Listing,
+                    }
 
-                    // Try to get error in data
-                    let maybe_data = data.split('\n').nth(line.saturating_sub(1)).map(|line| {
-                        let start = column.saturating_sub(30);
+                    let jd = &mut serde_json::Deserializer::from_str(&data);
+                    let error = serde_path_to_error::deserialize::<_, Subreddit>(jd)
+                        .expect_err("deserializing with serde_path_to_error should error too");
 
-                        &line[start..]
-                    });
-
-                    let _ = tokio::fs::write("subreddit-error.json", data.as_bytes())
+                    tokio::fs::write("subreddit-error.json", data.as_bytes())
                         .await
-                        .is_ok();
+                        .expect("failed to save error");
 
-                    panic!(
-                        "failed to get subreddit \"{subreddit}\": {error:#?}\ndata: {maybe_data:?}"
-                    );
+                    panic!("failed to get subreddit \"{subreddit}\": {error:#?}");
                 }
                 Err(error) => {
                     panic!("failed to get subreddit \"{subreddit}\": {error:#?}");
